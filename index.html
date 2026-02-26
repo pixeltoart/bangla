@@ -1,138 +1,271 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<title>Bangla Date Converter – Updated</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
- body { font-family:'Hind Siliguri', sans-serif; margin:0; padding:0;
-        background: linear-gradient(135deg,#4b6cb7,#182848); color:#fff; height:100vh; display:flex; flex-direction:column; transition:0.3s; }
- .dark { background:#0b0b0b; color:#eee; }
- .topbar{ width:100%; padding:16px; text-align:center; background:rgba(255,255,255,0.08); backdrop-filter:blur(8px); font-weight:700; display:flex; justify-content:center; gap:20px; align-items:center; }
- .toggleBtn{ padding:6px 16px; border-radius:10px; border:none; cursor:pointer; background:#ffd740; font-weight:700; }
- .main{ flex:1; display:flex; }
- .left{ flex:3; display:flex; align-items:center; justify-content:center; padding:30px; }
- .card{ width:90%; max-width:600px; background:rgba(255,255,255,0.12); padding:40px; border-radius:18px; text-align:center; }
- input{ width:84%; padding:12px 14px; font-size:18px; border-radius:10px; border:none; outline:none; }
- button{ padding:12px 30px; margin-top:18px; border-radius:10px; border:none; background:#ffcc00; font-weight:700; cursor:pointer; }
- .result{ margin-top:22px; background:rgba(255,255,255,0.18); padding:16px; border-radius:10px; color:#07203b; font-weight:700; }
- .right{ flex:1; background:rgba(255,255,255,0.08); padding:26px; border-left:2px solid rgba(255,255,255,0.06); }
- .right h3{ margin-top:0; }
- .right input{ width:100%; }
- .footer{ padding:10px; text-align:center; background:rgba(0,0,0,0.18); }
- .footer a{ color:#ffeb3b; text-decoration:none; font-weight:700; }
- @media(max-width:900px){ .main{flex-direction:column;} .right{border-left:none;border-top:2px solid rgba(255,255,255,0.06);} }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangla Pro Date Converter & Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --text: #ffffff;
+        }
+
+        .dark-mode {
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            background-attachment: fixed;
+            color: var(--text);
+            transition: all 0.5s ease;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Header */
+        .header {
+            backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .clock-section { text-align: right; }
+        #digitalClock { font-size: 1.2rem; font-weight: 700; color: #ffd740; }
+
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            padding: 30px 5%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        h2, h3 { border-bottom: 2px solid var(--secondary); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
+
+        input, button {
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input { background: rgba(255,255,255,0.9); color: #333; width: 60%; }
+        button {
+            background: linear-gradient(to right, #ffd740, #ffab00);
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover { opacity: 0.9; transform: scale(1.05); }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-left: 5px solid #ffd740;
+            border-radius: 10px;
+        }
+
+        .big-date { font-size: 2.5rem; color: #ffd740; margin: 10px 0; }
+
+        /* Age Calculator Styling */
+        .age-grid { display: grid; gap: 15px; }
+        .age-grid input { width: 90%; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            input { width: 100%; box-sizing: border-box; }
+        }
+
+        .footer { text-align: center; padding: 20px; margin-top: 50px; background: rgba(0,0,0,0.3); }
+        .footer a { color: #ffd740; text-decoration: none; }
+    </style>
 </head>
 <body>
 
-<div class="topbar" id="todayTop">Loading...
- <button class="toggleBtn" onclick="toggleMode()">Day/Night</button>
-</div>
+<header class="header">
+    <div>
+        <h1 style="margin:0; font-size: 1.5rem;">Bangla<span style="color: #ffd740;">Date</span> Pro</h1>
+    </div>
+    <div class="clock-section">
+        <div id="digitalClock">--:--:--</div>
+        <button onclick="toggleMode()" style="padding: 5px 15px; font-size: 12px; margin-top: 5px;">থিম পরিবর্তন</button>
+    </div>
+</header>
 
-<div class="main">
-  <div class="left">
+<div class="container">
     <div class="card">
-      <h2>বাংলা তারিখ কনভার্টার</h2>
-      <input type="date" id="gdate">
-      <br>
-      <button id="convertBtn">রূপান্তর করুন</button>
-      <div id="output" class="result">বার: —<br>বাংলা তারিখ: —<br>বঙ্গাব্দ: —</div>
+        <h2>তারিখ রূপান্তরকারী</h2>
+        <p>ইংরেজি তারিখ নির্বাচন করুন:</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="date" id="gdate">
+            <button onclick="convert()">কনভার্ট করুন</button>
+        </div>
+
+        <div id="output" class="result-box">
+            <div id="resDay" style="font-size: 1.2rem;">বার: —</div>
+            <div id="resDate" class="big-date">বাংলা তারিখ: —</div>
+            <div id="resYear" style="letter-spacing: 2px;">বঙ্গাব্দ: —</div>
+        </div>
     </div>
-  </div>
 
-  <div class="right">
-    <h3>কীভাবে গণনা করা হয়?</h3>
-    প্রথম ৬ মাস (বৈশাখ→আশ্বিন) = ৩১ দিন।<br>
-    পরবর্তী ৪ মাস (কার্তিক→মাঘ) = ৩০ দিন।<br>
-    ফাল্গুন = ২৯ দিন (লিপে ৩০)।<br>
-    চৈত্র = ৩০ দিন।<br><br>
-    বাংলা বছর শুরু: ১৪ এপ্রিল।
-
-    <hr style="margin:20px 0; opacity:0.4;">
-
-    <h3>Age Calculator</h3>
-    <label>জন্ম তারিখ:</label>
-    <input type="date" id="birthDate"><br><br>
-
-    <label>যে তারিখে বয়স গণনা করবেন:</label>
-    <input type="date" id="ageToDate"><br>
-
-    <button onclick="calcAge()">Calculate</button>
-
-    <div id="ageResult" class="result" style="background:rgba(255,255,255,0.15); color:#07203b;">
-        বয়স: —
+    <div class="card">
+        <h3>বয়স ক্যালকুলেটর</h3>
+        <div class="age-grid">
+            <label>জন্ম তারিখ:</label>
+            <input type="date" id="birthDate">
+            <label>আজকের তারিখ:</label>
+            <input type="date" id="ageToDate">
+            <button onclick="calcAge()">হিসাব করুন</button>
+        </div>
+        <div id="ageResult" class="result-box" style="border-left-color: #00f2fe;">
+            আপনার বয়স: —
+        </div>
     </div>
-  </div>
 </div>
 
-<div class="footer">Design By <a href="https://fb.com/bdthemex" target="_blank">BDthemeX</a></div>
+<div class="footer">
+    © <span id="year"></span> | Designed with ❤️ by <a href="https://fb.com/bdthemex" target="_blank">BDthemeX</a>
+</div>
 
 <script>
-const WEEK=["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
-const BN_MONTHS=["বৈশাখ","জ্যৈষ্ঠ","আষাঢ়","শ্রাবণ","ভাদ্র","আশ্বিন","কার্তিক","অগ্রহায়ণ","পৌষ","মাঘ","ফাল্গুন","চৈত্র"];
-const BN_DIGITS={'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
-function toBanglaDigits(n){return String(n).split('').map(c=>BN_DIGITS[c]??c).join('');}
-function isGregorianLeap(y){return ((y%4===0)&&(y%100!==0))||(y%400===0);} 
+    const BN_MONTHS = ["বৈশাখ", "জ্যৈষ্ঠ", "আষাঢ়", "শ্রাবণ", "ভাদ্র", "আশ্বিন", "কার্তিক", "অগ্রহায়ণ", "পৌষ", "মাঘ", "ফাল্গুন", "চৈত্র"];
+    const BN_DAYS = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
+    const BN_NUMS = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
 
-function toBanglaRevised(gdate){
- if(!(gdate instanceof Date)||isNaN(gdate.getTime()))return null;
- const y=gdate.getFullYear(),m=gdate.getMonth(),d=gdate.getDate();
- const gday=Date.UTC(y,m,d);
- let startYear=y;
- const startBD=Date.UTC(startYear,3,14);
- if(gday<startBD) startYear--;
- const startUTC=Date.UTC(startYear,3,14);
- const daysSince=Math.floor((gday-startUTC)/(86400000));
- const falgunLen=isGregorianLeap(startYear+1)?30:29;
- const monthLengths=[31,31,31,31,31,31,30,30,30,30,falgunLen,30];
- let rem=daysSince,mi=0;
- while(mi<12&&rem>=monthLengths[mi]){rem-=monthLengths[mi];mi++;}
- if(mi>=12){mi=11;rem=monthLengths[11]-1;}
- return{year:startYear-593,monthIndex:mi,day:rem+1};
-}
+    const toBn = n => String(n).replace(/\d/g, d => BN_NUMS[d]);
 
-const input=document.getElementById('gdate');
-const out=document.getElementById('output');
-const convertBtn=document.getElementById('convertBtn');
-const topbar=document.getElementById('todayTop');
+    // Clock Function
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('digitalClock').innerText = now.toLocaleTimeString('bn-BD');
+    }
+    setInterval(updateClock, 1000);
 
-(function init(){
- const now=new Date();
- input.value=now.toISOString().slice(0,10);
- document.getElementById("ageToDate").value=now.toISOString().slice(0,10);
- renderForDate(now);
-})();
+    // Dark Mode
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+    }
 
-function renderForDate(jsDate){
- const d=new Date(jsDate.getFullYear(),jsDate.getMonth(),jsDate.getDate());
- const b=toBanglaRevised(d);
- if(!b){out.innerHTML="বার: —<br>বাংলা তারিখ: —<br>বঙ্গাব্দ: —"; return;}
- const week=WEEK[d.getDay()];
- out.innerHTML=`বার: <b>${week}</b><br>বাংলা তারিখ: <b>${toBanglaDigits(b.day)} ${BN_MONTHS[b.monthIndex]}</b><br>বঙ্গাব্দ: <b>${toBanglaDigits(b.year)}</b>`;
- const en=d.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
- topbar.innerHTML=`আজ: <b>${en}</b> | <b>${week}, ${toBanglaDigits(b.day)} ${BN_MONTHS[b.monthIndex]}, ${toBanglaDigits(b.year)}</b>`;
-}
+    // Bangla Conversion Logic (Revised Model)
+    function getBanglaDate(date) {
+        let d = date.getDate();
+        let m = date.getMonth() + 1;
+        let y = date.getFullYear();
+        let dayIndex = date.getDay();
 
-convertBtn.addEventListener('click',()=>{
- const v=input.value; if(!v)return;
- renderForDate(new Date(v+'T00:00:00'));
-});
+        let bYear = y - 593;
+        let bMonth, bDay;
 
-function calcAge(){
- const b=document.getElementById("birthDate").value;
- const t=document.getElementById("ageToDate").value;
- if(!b||!t){alert("দুইটি তারিখই সিলেক্ট করুন");return;}
- const birth=new Date(b), today=new Date(t);
- let y=today.getFullYear()-birth.getFullYear();
- let m=today.getMonth()-birth.getMonth();
- let d=today.getDate()-birth.getDate();
- if(d<0){m--; d+=new Date(today.getFullYear(),today.getMonth(),0).getDate();}
- if(m<0){y--; m+=12;}
- document.getElementById("ageResult").innerHTML=`বয়স: <b>${toBanglaDigits(y)} বছর, ${toBanglaDigits(m)} মাস, ${toBanglaDigits(d)} দিন</b>`;
-}
+        // Simplified logic for Revised Bangla Calendar
+        // April 14 is 1st Boishakh
+        const isLeap = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+        
+        // Days since start of Gregorian year
+        const dayCount = Math.floor((date - new Date(y, 0, 0)) / 86400000);
+        
+        // April 14 (Day 104 in non-leap, 105 in leap)
+        let startDay = isLeap ? 105 : 104;
 
-function toggleMode(){ document.body.classList.toggle('dark'); }
+        if (dayCount < startDay) {
+            bYear -= 1;
+            // Calculations for previous year's end months
+        }
+
+        // Logic for Dynamic Calculation
+        const monthLengths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, isLeap ? 30 : 29, 30];
+        
+        // Adjust for April 14 start
+        let daysInBn = dayCount - startDay + 1;
+        if (daysInBn <= 0) {
+            let prevYearLeap = ((y-1) % 4 === 0 && (y-1) % 100 !== 0) || ((y-1) % 400 === 0);
+            daysInBn += prevYearLeap ? 366 : 365;
+        }
+
+        let mIdx = 0;
+        while (daysInBn > monthLengths[mIdx]) {
+            daysInBn -= monthLengths[mIdx];
+            mIdx++;
+        }
+
+        return {
+            day: toBn(daysInBn),
+            month: BN_MONTHS[mIdx],
+            year: toBn(bYear),
+            weekDay: BN_DAYS[dayIndex]
+        };
+    }
+
+    function convert() {
+        const val = document.getElementById('gdate').value;
+        if(!val) return;
+        const result = getBanglaDate(new Date(val));
+        document.getElementById('resDay').innerHTML = `বার: <b>${result.weekDay}</b>`;
+        document.getElementById('resDate').innerHTML = `${result.day} ${result.month}`;
+        document.getElementById('resYear').innerHTML = `বঙ্গাব্দ: ${result.year}`;
+    }
+
+    function calcAge() {
+        const b = document.getElementById("birthDate").value;
+        const t = document.getElementById("ageToDate").value;
+        if(!b || !t) return alert("তারিখ দিন!");
+        
+        let birth = new Date(b);
+        let today = new Date(t);
+        
+        let y = today.getFullYear() - birth.getFullYear();
+        let m = today.getMonth() - birth.getMonth();
+        let d = today.getDate() - birth.getDate();
+
+        if (d < 0) { m--; d += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+        if (m < 0) { y--; m += 12; }
+
+        document.getElementById("ageResult").innerHTML = `আপনার বয়স: <b>${toBn(y)} বছর, ${toBn(m)} মাস, ${toBn(d)} দিন</b>`;
+    }
+
+    // Initialize
+    window.onload = () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('gdate').value = today;
+        document.getElementById('ageToDate').value = today;
+        document.getElementById('year').innerText = new Date().getFullYear();
+        convert();
+        updateClock();
+    };
 </script>
+
 </body>
 </html>
