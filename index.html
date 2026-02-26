@@ -128,13 +128,49 @@
 
         .footer { text-align: center; padding: 20px; margin-top: 50px; background: rgba(0,0,0,0.3); }
         .footer a { color: #ffd740; text-decoration: none; }
+        .main-logo {
+    margin: 0;
+    font-size: 1.8rem; /* একটু বড় ফন্ট সাইজ */
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.main-logo a {
+    text-decoration: none;
+    color: #ffffff; /* মেইন টেক্সট কালার */
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.main-logo span {
+    color: #ffd740; /* .25u.com এর জন্য হাইলাইট কালার */
+    transition: all 0.3s ease;
+}
+
+/* হোভার করলে হালকা গ্লো ইফেক্ট হবে */
+.main-logo a:hover {
+    transform: scale(1.02);
+    text-shadow: 0 0 15px rgba(255, 215, 64, 0.3);
+}
+
+.main-logo a:hover span {
+    color: #ffffff; /* হোভার করলে কালার ইন্টারচেঞ্জ হবে */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ডার্ক মোডের জন্য অ্যাডজাস্টমেন্ট (যদি থাকে) */
+.dark-mode .main-logo a {
+    color: #e8eaed;
+}
     </style>
 </head>
 <body>
 
 <header class="header">
     <div>
-        <h1 style="margin:0; font-size: 1.5rem;"><a href="/">Bangla.<span style="color: #ffd740;">25u.com</span></a></h1>
+        <h1 class="main-logo">
+    <a href="/">Bangla.<span>25u.com</span></a>
+</h1>
     </div>
     <div class="clock-section">
         <div id="digitalClock">--:--:--</div>
